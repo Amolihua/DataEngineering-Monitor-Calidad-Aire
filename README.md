@@ -39,3 +39,6 @@ Job de Ingesta: Un notebook de Python descarga los datos diarios de la API y los
 Trigger de Pipeline: Una vez finalizada la ingesta, se dispara el pipeline de Delta Live Tables para procesar los nuevos registros de forma incremental.
 
 Integración con GitHub: Los Workflows y Pipelines leen directamente desde este repositorio, garantizando que el código en producción sea siempre la versión aprobada en main.
+
+
+<img width="1577" height="741" alt="image" src="https://github.com/user-attachments/assets/de91aea4-3232-48c0-a109-b01d292fcddd" />
