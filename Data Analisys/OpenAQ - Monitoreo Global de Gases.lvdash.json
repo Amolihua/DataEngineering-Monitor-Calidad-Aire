@@ -1,0 +1,364 @@
+{
+  "datasets": [
+    {
+      "name": "5286acdd",
+      "displayName": "Analisis Diario Promedio",
+      "queryLines": [
+        "USE CATALOG `openaq`;\n",
+        "USE SCHEMA `livestreamdata`;\n",
+        "\n",
+        "SELECT \n",
+        "    city, \n",
+        "    parameter, \n",
+        "    date, \n",
+        "    avg_value,\n",
+        "    max_value\n",
+        "FROM openaq.livestreamdata.gold_daily_summary \n",
+        "WHERE parameter IN ('pm25', 'co', 'no2')\n",
+        "ORDER BY date DESC, avg_value DESC;"
+      ]
+    },
+    {
+      "name": "0d74f282",
+      "displayName": "SF",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "SELECT \n",
+        "    hour,\n",
+        "    parameter,\n",
+        "    max_gas_level,\n",
+        "    avg_gas_level,\n",
+        "    status\n",
+        "FROM openaq.livestreamdata.gold_sf_gas_anomalies\n",
+        "\n",
+        "ORDER BY hour DESC\n",
+        "LIMIT 100;"
+      ]
+    },
+    {
+      "name": "ca93856c",
+      "displayName": "lV",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "SELECT \n",
+        "    hour,\n",
+        "    parameter,\n",
+        "    max_gas_level,\n",
+        "    avg_gas_level,\n",
+        "    status\n",
+        "FROM openaq.livestreamdata.gold_lv_gas_anomalies\n",
+        "\n",
+        "ORDER BY hour DESC\n",
+        "LIMIT 100;"
+      ]
+    },
+    {
+      "name": "1e8d2ad8",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "USE CATALOG `workspace`;\n",
+        "USE SCHEMA `default`;\n",
+        "\n",
+        "SELECT \n",
+        "    hour,\n",
+        "    parameter,\n",
+        "    max_gas_level,\n",
+        "    avg_gas_level,\n",
+        "    status\n",
+        "FROM openaq.livestreamdata.gold_boston_gas_anomalies\n",
+        "\n",
+        "ORDER BY hour DESC\n",
+        "LIMIT 100;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "22bab374",
+      "displayName": "AnomaliasGases",
+      "layout": [
+        {
+          "widget": {
+            "name": "e8266ed7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5286acdd",
+                  "fields": [
+                    {
+                      "name": "city",
+                      "expression": "`city`"
+                    },
+                    {
+                      "name": "daily(date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `date`)"
+                    },
+                    {
+                      "name": "sum(avg_value)",
+                      "expression": "SUM(`avg_value`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Promedio diario por ciudad",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(avg_value)",
+                  "displayName": "sum(avg_value)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "city",
+                  "displayName": "city",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f1c2c6d2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "0d74f282",
+                  "fields": [
+                    {
+                      "name": "hourly(hour)",
+                      "expression": "DATE_TRUNC(\"HOUR\", `hour`)"
+                    },
+                    {
+                      "name": "sum(avg_gas_level)",
+                      "expression": "SUM(`avg_gas_level`)"
+                    },
+                    {
+                      "name": "sum(max_gas_level)",
+                      "expression": "SUM(`max_gas_level`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "San Francisco: Detección de Picos Anómalos",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "hourly(hour)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(avg_gas_level)"
+                    },
+                    {
+                      "fieldName": "sum(max_gas_level)"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "83cedba7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ca93856c",
+                  "fields": [
+                    {
+                      "name": "hourly(hour)",
+                      "expression": "DATE_TRUNC(\"HOUR\", `hour`)"
+                    },
+                    {
+                      "name": "sum(avg_gas_level)",
+                      "expression": "SUM(`avg_gas_level`)"
+                    },
+                    {
+                      "name": "sum(max_gas_level)",
+                      "expression": "SUM(`max_gas_level`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Las Vegas: Detección de Picos Anómalos",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "hourly(hour)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(avg_gas_level)"
+                    },
+                    {
+                      "fieldName": "sum(max_gas_level)"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "7e365e7a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1e8d2ad8",
+                  "fields": [
+                    {
+                      "name": "hourly(hour)",
+                      "expression": "DATE_TRUNC(\"HOUR\", `hour`)"
+                    },
+                    {
+                      "name": "sum(avg_gas_level)",
+                      "expression": "SUM(`avg_gas_level`)"
+                    },
+                    {
+                      "name": "sum(max_gas_level)",
+                      "expression": "SUM(`max_gas_level`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Boston: Detección de Picos Anómalos",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "hourly(hour)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(avg_gas_level)"
+                    },
+                    {
+                      "fieldName": "sum(max_gas_level)"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "50327acb",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">Panel de Control de Seguridad: Anomalías en Gases Atmosféricos</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
